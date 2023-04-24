@@ -4,7 +4,6 @@ const GlobalStyle = createGlobalStyle`
     * {
         font-family: 'Raleway';
         font-style: normal;
-        box-sizing: border-box;
         font-weight: 400;
     }
     button {
@@ -54,6 +53,6 @@ const GlobalStyle = createGlobalStyle`
         text-decoration: none;
         padding-top: 30px;
     }
-`;
+`
 
-export default GlobalStyle;
+export default GlobalStyle

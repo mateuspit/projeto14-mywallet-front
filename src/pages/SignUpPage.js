@@ -1,25 +1,27 @@
-import styled from "styled-components"
 import { Link } from "react-router-dom"
+import styled from "styled-components"
 import MyWalletLogo from "../components/MyWalletLogo"
 
-export default function SignInPage() {
+export default function SignUpPage() {
   return (
-    <SingInContainer>
+    <SingUpContainer>
       <form>
         <MyWalletLogo />
+        <input placeholder="Nome" type="text" />
         <input placeholder="E-mail" type="email" />
         <input placeholder="Senha" type="password" autocomplete="new-password" />
-        <button>Entrar</button>
+        <input placeholder="Confirme a senha" type="password" autocomplete="new-password" />
+        <button>Cadastrar</button>
       </form>
 
       <Link>
-        Primeira vez? Cadastre-se!
+        Já tem uma conta? Entre agora!
       </Link>
-    </SingInContainer>
+    </SingUpContainer>
   )
 }
 
-const SingInContainer = styled.section`
+const SingUpContainer = styled.section`
   height: 100vh;
   display: flex;
   flex-direction: column;
