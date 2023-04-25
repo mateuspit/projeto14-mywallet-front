@@ -54,7 +54,7 @@ export default function HomePage() {
 
   function logout() {
     console.log(config);
-    const promise = axios.delete('http://localhost:5000/logout', config);
+    const promise = axios.delete(`${process.env.REACT_APP_API_URL}/logout`, config);
     promise.then((res) => {
       console.log(res);
       localStorage.removeItem("user")

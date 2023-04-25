@@ -22,7 +22,7 @@ export default function SignUpPage() {
       username
     };
     if (password === passwordConfirm) {
-      const promise = axios.post('http://localhost:5000/cadastro', signInSendableObject);
+      const promise = axios.post(`${process.env.REACT_APP_API_URL}/cadastro`, signInSendableObject);
       promise.then((res) => {
         setSignInPageDisable(false);
         console.log(res);

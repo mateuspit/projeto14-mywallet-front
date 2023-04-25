@@ -28,7 +28,7 @@ export default function TransactionsPage() {
     };
     // console.log(operationSendableObject);
     // console.log("antes promisse");
-    const promise = axios.post(`http://localhost:5000/nova-transacao/${type}`, operationSendableObject, config);
+    const promise = axios.post(`${process.env.REACT_APP_API_URL}/nova-transacao/${type}`, operationSendableObject, config);
     promise.then((res) => {
       // console.log("chegou no then");
       // console.log(res);
