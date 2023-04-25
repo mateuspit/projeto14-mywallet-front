@@ -3,20 +3,62 @@ import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../components/UserContext.js";
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import axios from "axios";
 
 export default function HomePage() {
-
-  const { userData, config } = useContext(UserContext);
-
+  const { userData, config, lsData, setConfig, setUserData, setLsData } = useContext(UserContext);
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (!lsData) {
+  //     console.log("lsData")
+  //     const localStoreObject = {
+  //       username: userData.username,
+  //       token: config.headers.Authorization?.replace("Bearer ", "")
+  //     };
+  //     console.log(localStoreObject);
+  //     localStorage.setItem("user", JSON.stringify(localStoreObject))
+  //     console.log("gravou");
+  //   }
+  //   else {
+  //     console.log("sem lsData")
+  //     const promise = axios.get(`${process.env.REACT_APP_API_URL}/transacoes`, {
+  //       headers: {
+  //         Authorization: `Bearer ${lsData.token}`
+  //       }
+  //     });
+  //     promise.then((res) => {
+  //       console.log(res);
+  //       const userToken = res.data.token;
+  //       let username = res.data.username;
+  //       username = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
+  //       const userHistory = res.data.userHistory;
+  //       const config = {
+  //         headers: {
+  //           "Authorization": `Bearer ${userToken}`
+  //         }
+  //       }
+  //       const userData = {
+  //         username,
+  //         userHistory
+  //       };
+  //       setUserData(userData);
+  //       setConfig(config);
+  //     });
+  //     promise.catch((res) => {
+  //       alert(res.response.data);
+  //     });
+  //   }
+  // }, []);
 
   function logout() {
     console.log(config);
     const promise = axios.delete('http://localhost:5000/logout', config);
     promise.then((res) => {
       console.log(res);
+      localStorage.removeItem("user")
+      setLsData(false);
       navigate('/');
     });
     promise.catch((res) => {
@@ -25,9 +67,39 @@ export default function HomePage() {
   }
   // console.log(userData);
   // console.log(userData.username);
-  const balanceIndex = (userData.userHistory.length) - 1;
+  // let balanceIndex = 0;
+  // if (!userData.userHistory) {
+  //   userData.userHistory = [];
+  //   balanceIndex = 0;
+  //   userData.userHistory[balanceIndex] = {
+  //     balance: 0
+  //   };
+  //   userData.userHistory[balanceIndex].balance = userData.userHistory[balanceIndex].balance.toFixed(2);
+  // } else {
+  //   balanceIndex = userData.userHistory.length - 1;
+  //   userData.userHistory[balanceIndex].balance = userData.userHistory[balanceIndex].balance.toFixed(2);
+  // }
+  function getBalance() {
+    if (userData.userHistory.length === 0) {
+
+      return (
+        <Value color={"positivo"}>0</Value>
+      );
+    }
+    else {
+      const balanceIndex = userData.userHistory.length - 1;
+      const userBalance = userData.userHistory[balanceIndex].balance.toFixed(2)
+      return (
+        <Value color={userBalance >= 0 ? "positivo" : "negativo"}>{userBalance}</Value>
+      );
+    }
+  }
+
   // console.log(balanceIndex)
   // console.log(userData.userHistory)
+  // useEffect(() => {
+  //   console.log(userData);
+  // }, []);
 
   function plotOperations(userHistory) {
     let userDescription = "";
@@ -63,6 +135,9 @@ export default function HomePage() {
   // console.log(userData.userHistory[balanceIndex].balance.toFixed(2));
   // console.log(balanceIndex);
   // console.log(userData.userHistory);
+  console.log(userData); 
+  // console.log(userHistory);
+
   return (
     <HomeContainer>
       <Header>
@@ -77,7 +152,7 @@ export default function HomePage() {
 
         <article>
           <strong>Saldo</strong>
-          <Value color={"positivo"}>{userData.userHistory[balanceIndex].balance.toFixed(2)}</Value>
+          {getBalance()}
         </article>
       </TransactionsContainer>
 

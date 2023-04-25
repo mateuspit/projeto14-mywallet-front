@@ -21,16 +21,24 @@ export default function SignUpPage() {
       password,
       username
     };
-    const promise = axios.post('http://localhost:5000/cadastro', signInSendableObject);
-    promise.then((res) => {
+    if (password === passwordConfirm) {
+      const promise = axios.post('http://localhost:5000/cadastro', signInSendableObject);
+      promise.then((res) => {
+        setSignInPageDisable(false);
+        console.log(res);
+        navigate('/');
+      });
+      promise.catch((res) => {
+        alert(res.response.data);
+        setSignInPageDisable(false);
+      });
+    }
+    else {
+      alert("Senhas incompativeis, preenche senha e confirmar senha de novo!");
+      setPassword("");
+      setPasswordConfirm("");
       setSignInPageDisable(false);
-      console.log(res);
-      navigate('/');
-    });
-    promise.catch((res) => {
-      alert(res.response.data);
-      setSignInPageDisable(false);
-    });
+    }
   }
 
   return (
