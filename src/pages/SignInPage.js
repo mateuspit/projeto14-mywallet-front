@@ -6,6 +6,9 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom";
 // import { UserContext } from "../../components/UserContext.js";
 import { UserContext } from "../components/UserContext.js";
+// import dotenv from "dotenv";
+// dotenv.config();
+
 
 
 
@@ -25,7 +28,9 @@ export default function SignInPage() {
       password
     };
     // console.log("apertou botão?");
-    const promise = axios.post('http://localhost:5000/signIn', loginSendableObject);
+    console.log(process.env.REACT_APP_API_URL);
+    const promise = axios.post(`${process.env.REACT_APP_API_URL}/signIn`, loginSendableObject);
+    // const promise = axios.post(`http://localhost:5000/signIn`, loginSendableObject);
     promise.then((res) => {
       // console.log("chegou no then");
       // console.log(res);
