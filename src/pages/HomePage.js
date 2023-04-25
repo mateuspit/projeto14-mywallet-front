@@ -1,37 +1,75 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../components/UserContext.js";
+import { useContext } from 'react';
 
 export default function HomePage() {
+
+  const { userData } = useContext(UserContext);
+
+  const navigate = useNavigate();
+
+  function logout() {
+
+  }
+  // console.log(userData);
+  // console.log(userData.username);
+  const balanceIndex = (userData.userHistory.length)-1;
+  // const balanceIndex = userData.userHistory.length;
+  // console.log(balanceIndex)
+  // console.log(userData.userHistory)
+
+  function plotOperations(userHistory) {
+    let userDescription = "";
+    if (userHistory.description.length > 16) {
+      userDescription = userHistory.description.slice(0, 16) + "...";
+    }
+    else {
+      userDescription = userHistory.description
+    }
+    if (userHistory.type.toLowerCase() === "saida") {
+      return (
+        <ListItemContainer>
+          <div>
+            <span>{userHistory.date}</span>
+            <OperationDescription><strong>{userDescription}</strong></OperationDescription>
+          </div>
+          <Value color={"negativo"}><strong>{userHistory.amount.toFixed(2)}</strong></Value>
+        </ListItemContainer>
+      );
+    }
+    else {
+      return (
+        <ListItemContainer>
+          <div>
+            <span>{userHistory.date}</span>
+            <OperationDescription><strong>{userDescription}</strong></OperationDescription>
+          </div>
+          <Value color={"positivo"}>{userHistory.amount.toFixed(2)}</Value>
+        </ListItemContainer>
+      );
+    }
+  }
+  console.log(userData.userHistory[balanceIndex].balance.toFixed(2));
+  console.log(balanceIndex);
+  console.log(userData.userHistory);
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, Fulano</h1>
-        <BiExit />
+        <HelloUser>Olá, {userData.username}</HelloUser>
+        <BiExit onClick={logout} />
       </Header>
 
       <TransactionsContainer>
-        <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong>Almoço mãe</strong>
-            </div>
-            <Value color={"negativo"}>120,00</Value>
-          </ListItemContainer>
-
-          <ListItemContainer>
-            <div>
-              <span>15/11</span>
-              <strong>Salário</strong>
-            </div>
-            <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer>
-        </ul>
+        <OperationsList>
+          {userData.userHistory.map((uh) => plotOperations(uh))}
+        </OperationsList>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={"positivo"}>2880,00</Value>
+          <Value color={"positivo"}>{userData.userHistory[balanceIndex].balance.toFixed(2)}</Value>
         </article>
       </TransactionsContainer>
 
@@ -51,6 +89,28 @@ export default function HomePage() {
   )
 }
 
+const OperationsList = styled.ul`
+  overflow-y: scroll;
+  max-height: 100%;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const OperationDescription = styled.strong`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const HelloUser = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 31px;
+`;
+
 const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -66,6 +126,7 @@ const Header = styled.header`
   color: white;
 `
 const TransactionsContainer = styled.article`
+  max-height: 65%;
   flex-grow: 1;
   background-color: #fff;
   color: #000;
