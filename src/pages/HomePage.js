@@ -4,20 +4,28 @@ import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../components/UserContext.js";
 import { useContext } from 'react';
+import axios from "axios";
 
 export default function HomePage() {
 
-  const { userData } = useContext(UserContext);
+  const { userData, config } = useContext(UserContext);
 
   const navigate = useNavigate();
 
   function logout() {
-
+    console.log(config);
+    const promise = axios.delete('http://localhost:5000/logout', config);
+    promise.then((res) => {
+      console.log(res);
+      navigate('/');
+    });
+    promise.catch((res) => {
+      alert(res.response.data);
+    });
   }
   // console.log(userData);
   // console.log(userData.username);
-  const balanceIndex = (userData.userHistory.length)-1;
-  // const balanceIndex = userData.userHistory.length;
+  const balanceIndex = (userData.userHistory.length) - 1;
   // console.log(balanceIndex)
   // console.log(userData.userHistory)
 
@@ -52,14 +60,14 @@ export default function HomePage() {
       );
     }
   }
-  console.log(userData.userHistory[balanceIndex].balance.toFixed(2));
-  console.log(balanceIndex);
-  console.log(userData.userHistory);
+  // console.log(userData.userHistory[balanceIndex].balance.toFixed(2));
+  // console.log(balanceIndex);
+  // console.log(userData.userHistory);
   return (
     <HomeContainer>
       <Header>
         <HelloUser>Olá, {userData.username}</HelloUser>
-        <BiExit onClick={logout} />
+        <BiExit style={{ cursor: 'pointer' }} onClick={logout} />
       </Header>
 
       <TransactionsContainer>
@@ -75,11 +83,11 @@ export default function HomePage() {
 
 
       <ButtonsContainer>
-        <button>
+        <button onClick={() => navigate('/nova-transacao/entrada')}>
           <AiOutlinePlusCircle />
           <p>Nova <br /> entrada</p>
         </button>
-        <button>
+        <button onClick={() => navigate('/nova-transacao/saida')}>
           <AiOutlineMinusCircle />
           <p>Nova <br />saída</p>
         </button>
@@ -89,8 +97,11 @@ export default function HomePage() {
   )
 }
 
+
+
 const OperationsList = styled.ul`
   overflow-y: scroll;
+  line-height: 19px;
   max-height: 100%;
   scrollbar-width: none;
   &::-webkit-scrollbar {
@@ -127,6 +138,7 @@ const Header = styled.header`
 `
 const TransactionsContainer = styled.article`
   max-height: 65%;
+  /* padding-bottom: 19px; */
   flex-grow: 1;
   background-color: #fff;
   color: #000;

@@ -1,11 +1,11 @@
 import styled from "styled-components"
 import { Link } from "react-router-dom"
 import MyWalletLogo from "../components/MyWalletLogo"
-import { useEffect, useState, useContext } from "react"
+import { useState, useContext } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
 // import { UserContext } from "../../components/UserContext.js";
-import { UserContext, setUserData } from "../components/UserContext.js";
+import { UserContext } from "../components/UserContext.js";
 
 
 
@@ -35,10 +35,10 @@ export default function SignInPage() {
       username = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
       // console.log(userToken);
       // console.log(username);
-      
+
       const userHistory = res.data.userHistory;
       // console.log(res.data.username)
-      
+
       // const userImage = res.data.image;
       navigate('/home');
       const config = {
